@@ -125,7 +125,7 @@ const scenes = {
     reunion_entry: {
         text: [
             "The hall is buzzing with laughter. Old friends gather in small circles.",
-            "You spot Nivi near the buffet table."
+            "You spot Nvidia near the buffet table."
         ],
         choices: [
             { text: "Talk to nvidia", next: "talk_nvidia" },
@@ -145,3 +145,4 @@ const scenes = {
 };
 
 renderScene();
+
