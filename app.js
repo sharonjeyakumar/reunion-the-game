@@ -1,5 +1,5 @@
-const ostTruthAndLies = "ost/Truth-and-lies.mp3";
-const audio = new Audio(ostTruthAndLies);
+const ostmainMenu = "ost/mainmenu.wav";
+const audio = new Audio(ostmainMenu);
 
 const fxclickSound = "ost/shutter-click.wav";
 const clickSound = new Audio(fxclickSound);
@@ -55,6 +55,7 @@ app.addEventListener('click', ()=>{
     if(!isGameScreen){
         if(!titleShown){
             audio.play();
+            clickSound.play();
             titleContainer.classList.add('show');
             creditsContainer.classList.add('show');
             titleShown = true;
