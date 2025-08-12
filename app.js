@@ -18,6 +18,24 @@ window.onload = function(){
   });
 }
 
+function unlockAudio() {
+  // Attempt to play/pause each sound so browser marks them as "user activated"
+  [audio, clickSound, choiceSound, choiceConfirm].forEach(snd => {
+    snd.play().then(() => {
+      snd.pause();
+      snd.currentTime = 0;
+    }).catch(() => {});
+  });
+
+  // Remove unlock listener
+  document.removeEventListener('touchstart', unlockAudio);
+  document.removeEventListener('click', unlockAudio);
+}
+
+document.addEventListener('touchstart', unlockAudio, { once: true });
+document.addEventListener('click', unlockAudio, { once: true });
+
+
 let titleShown = false;
 let isGameScreen = false;
 
