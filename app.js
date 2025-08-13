@@ -116,7 +116,7 @@ app.addEventListener('click', () => {
       }, 500);
       setTimeout(() => {
         addDialogue();
-        backBtn.classList.add('show');
+        // backBtn.classList.add('show');
       }, 550);
     }
   }
@@ -176,6 +176,12 @@ function addDialogue(){
             musicHandler(line.music);
         }
 
+        if (line.musicStop && currentMusic) {
+            currentMusic.pause();
+            currentMusic.currentTime = 0;
+            currentMusic = null;
+        }
+
         setTimeout(() => {
             element.classList.add('show');
             dialogueContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -188,8 +194,17 @@ function addDialogue(){
         currentDialogue++; 
     } else if (!choicesShown){
         choicesShown= true;
-        showChoices(scenes[currentScene].choices);
-        playSound(choiceSound);
+
+        const scene = scenes[currentScene];
+
+
+        if(scene.continue){
+            currentScene = scene.continue[0].next;
+            renderScene();
+        } else if(scene.choices){
+            showChoices(scenes[currentScene].choices);
+            playSound(choiceSound);
+        }
     }
 };
 
@@ -247,32 +262,140 @@ gameScreen.addEventListener('click', () => {
 const scenes = {
     intro: {
         text: [
-            { text: "As tempers flare, the room descends into utter chaos—shouts echo, fists fly, and the air thickens with tension. People push and shove, their anger unleashed in a frenzy of violence."},
-            { text: "Suddenly, cutting sharply through the cacophony, a piercing screech rends the air—an eerie, haunting sound that forces everyone to momentarily freeze."},
-            { text: "From above, a massive hawk descends with terrifying grace. Nearly 2 feet tall, its wings spread wide—stretching over 4 feet—casting a vast shadow over the crowd. Its powerful talons reach out like iron claws, ready to seize its prey.", music: "hawk.mp3"},
-            { text: "Gasps ripple through the crowd as all eyes fixate on the unbelievable sight: Pranav of CSE C, perched atop the giant hawk, gripping tightly with fierce determination. The bird’s muscles tense as it swoops down, snatching Vel into its grasp with swift precision."},
+            {text: `Simson\nSubject: PSNA CSE D Batch Reunion – Special Night!`},
+            // {text: `Simson stares at the screen, adjusting his glasses.`},
+            // {text: `“Hmm… maybe nvidia will be there… research break for one night won’t hurt.”`},
+            // {text: `He clicks “Yes,” hiding a tab that definitely isn’t research.`},
+            // {text: `Sharvesh\nSubject: Come meet your old friends!`},
+            // {text: `“Murder rate in the city’s low this week. I can afford to attend....Time to seek some revenge”`},
+            // {text: `He doesn’t notice the anonymous sender’s address isn’t PSNA’s usual domain.`},
+            // {text: `Sharon\nSubject: Let’s reunite in the Lord’s joy!`},
+            // {text: `“This is it… a hall full of sinners ready to be saved. By the end of the night, half of them will be Christians. The other half… well, I’ll work on them next time.”`},
+            // {text: `“The Lord moves in mysterious ways… so do I 😉.”`},
+            // {text: `Tharun\nSubject: Come with your twin spirit! Show us the prime time prime bro`},
+            // {text: `“Finally… a chance to show them I made it. Time to be the superior twin.its PRIME TIME”`},
+            // {text: `Syed\nSubject: Big gathering, big opportunities.`},
+            // {text: `“Maybe I can move some barrels… call it charity work.”`},
+            // {text: `Varshan`},
+            // {text: `Subject: Old friends new deals!`},
+            // {text: `Varshan leans back in his chair at the brothel office, counting cash.`},
+            // {text: `“Reunion night? Business can wait… or maybe I’ll recruit some talent.”`},
+            // {text: `Dhanush\nSubject: Bring your family!`},
+            // {text: `“Varshan’s coming? Great… just great.”`},
+            // {text: `Vikaas\nSubject: Special guest appearance.`},
+            // {text: `“Finally, an audience without cameras… I think.”`},
+            // {text: `Vishal R\nSubject: See your old batchmates!`},
+            // {text: `“Amma, can I get Uber money for this?”`},
+            // {text: `Vishal Kumar\nSubject: It’s been a while… friends!`},
+            // {text: `“I could skip… but Soba will be there.”`},
+            // {text: `A faint smirk forms.`},
+            // {text: `“That’s reason enough.”`},
+            // {text: `Yuvaneshar\nSubject: A family reunion… or something else?`},
+            // {text: `Yuvaneshar scrolls through the email, side-eyeing 8 across the room.`},
+            // {text: `“Married life is… fine. But PSNA reunions?, He exhales.”`},
+            // {text: `“If the old gang’s coming… I better keep my guard up.”`},
+            // {text: `Subish\nSubject: We might need your help.`},
+            // {text: `Subish reads the invite and grins.`},
+            // {text: `“Sounds ominous… but I’ll bring my medical kit… and drugs."`},
+            // {text: `He pats his bag, where the paracetamol sits next to syringes of… less-than-legal substances.`},
+            // {text: `“For… emergencies, of course.”`},
+            // {text: `Sofiawari\nSubject: Simson will be there.`},
+            // {text: `"Finally… maybe tonight I’ll tell him.”, She sighs dreamily.`},
+            // {text: `Vel\nSubject: The King returns.`},
+            // {text: `“They’ve forgotten who the Sulerumbu King is. Time to remind them.”`},
+            // {text: `He adjusts his shades and clicks “Yes” on the RSVP.`},
+            // {text: `Shri Ram & Sri Dhanush`},
+            // {text: `Subject: Custody battle can wait… the reunion won’t.`},
+            // {text: `They look at each other.`},
+            // {text: `“They haven’t forgotten? Good.”`},
+            // {text: `Both silently wonder if this is their chance to win over Sri Varshan — or at least ruin the other’s chances.`},
+            // {text: `Scene 2 – “The Hall, 7:45 PM”`},
+            // {text: `Camera pans over PSNA’s decorated alumni hall — plastic flowers, banners with "The Reunion of psna family"`},
+            // {text: `Order of Arrivals`},
+            // {text: `Sharvesh – walks in first, scanning for threats like he’s on duty. He thinks the “DJ” is a suspect.`},
+            // {text: `Sofiawari – peeks in, spots Simson nowhere yet, clutches her dupatta nervously.`},
+            // {text: `Tharun – steps in with his brand new adidas, slow motion, clearly trying to outshine his twin (who isn’t even there yet).`},
+            // {text: `Syed – drops off a suspiciously heavy duffel bag near the snacks table.`},
+            // {text: `Varshan – flanked by two “assistants” from his “business,” starts networking instantly.`},
+            // {text: `Yuvaneshar & 8– clearly mid-argument as they ente`},
+            // {text: `Sharon – carrying a Bible in one hand, He scans the crowd with a preacher’s smile.`},
+            // {text: `"The Lord moves in mysterious ways… so do I,", he whispers`},
+            // {text: `Vishal Kumar – pretends to wave at “everyone,” as he thinks to himself has sofa arrived.`},
+            // {text: `Subish – wearing a doctor’s coat over party clothes, pockets clinking with contraband.`},
+            // {text: `Shri Ram & Sri Dhanush – arrive together but clearly not speaking.`},
+            // {text: `Shri Ram, wearing his Ajith Kumar Makkal Mandram party scarf, scans the room like it’s a political rally.`},
+            // {text: `“This is not just a reunion… it’s a campaign opportunity.”`},
+            // {text: `Simson – finally walks in late, laptop bag slung over shoulder, smelling faintly of… not research.`},
+            {text: `You catch the faintest sound of footsteps—muted, as though the shoes themselves were fitted with silencers.`},
+            {text: `The footsteps cease, and from beyond the door comes a language you don’t recognize—foreign, tribal, neither English nor Tamil.`},
+            {text: `You recognize that the door is locked from the inside stopping the strangers from entering.`},
+            {text: `As you consider opening the door, a commotion suddenly erupts inside.`}
         ],
         choices: [
-            { text: "Go to the reunion you wanted to go", next: "reunion_entry" },
-            { text: "Stay home", next: "stay_home" }
+            { text: "Open the door", next: "zuru_twins_arrives" },
+            { text: "Check what the commotion is about", next: "pistol_monkey_game" }
         ]
     },
 
-    reunion_entry: {
+    zuru_twins_arrives: {
         text: [
-            { text: "The hall is buzzing with laughter. Old friends gather in small circles."},
-            { text: "You spot Nivi near the buffet table."}
+            { text: "You open the lock."},
+            { text: `The double doors slam open so hard they rattle on their hinges. `, music: "sulleraiya.wav"},
+            { text: `A single **deep drumbeat** echoes across the hall — BOOM.`},
+            { text: `Two midgets in glittery red vests march in.  `},
+            { text: `One bangs tiny golden drums in a pounding rhythm`},
+            { text: `The other carries something wrapped in red silk on a golden cushion.  `},
+            { text: `**"The King is coming! The Sulerumbu King is coming!"** they shout in unison`},
+            { text: `The DJ freezes mid-scratch.`},
+            { text: `Lights drop to a dim red glow.`},
+            { text: `A smoke machine hisses, filling the floor with low clouds. `},
+            { text: `In the distance, a slow sitar riff begins, weaving with the drumbeats.`},
+            { text: `From the haze, Vel emerges.`},
+            { text: `He wears black shades, his expression unreadable.`},
+            { text: `A long red silk shawl trails behind him like a comet’s tail.`},
+            { text: `The first midget walks ahead of him, scattering **sugar crystals** onto the floor with every step — crunch, crunch, crunch.`},
+            { text: `Vel stops in the center of the hall. `},
+            { text: `The music dips into silence except for the slow thump of the drums.`},
+            { text: `The second midget steps forward.`},
+            { text: `With a dramatic flourish, he whips away the red silk to reveal…`},
+            { text: `A crown carved entirely from sugarcane, shaped into the head of a giant ant, its mandibles sharp, the round butt jutting proudly out at the back like a strange royal seal.`},
+            { text: `The crowd gasps. The midget rises on tiptoe, lifting the heavy crown, and gently lowers it onto Vel’s head.`},
+            { text: `The drums stop.`},
+            { text: `A beat of silence.`},
+            { text: `Vel grips the mic.`},
+            { text: `He looks over the crowd, smirks, and says:`},
+            { text: `"Tonight… the kingdom of Sulerumbu extends to PSNA Hall! All who kneel before the ant shall rise as legends!"`, musicStop: "sulleraiya.wav"},
+            { text: `For a split second, there’s stillness.`},
         ],
         choices: [
-            { text: "Talk to nvidia", next: "talk_nvidia" },
-            { text: "Grab food first", next: "buffet" }
+            { text: "Clap", next: "vel_ally" },
+            { text: "Mock him", next: "vel_enemy" }
         ]
     },
 
-    stay_home: {
+    vel_ally: {
         text: [
-            "You stay home and binge-watch your favorite series.",
-            "It’s peaceful… but you can’t shake off the feeling of missing out."
+            {text: `You clap loudly. Vel locks eyes with you and nods approvingly.`},
+            {text: `You’ve gained +2 Respect from the Sulerumbu King.`}
+        ],
+        continue: [
+            { next: "pistol_monkey_game"}
+        ]
+    },
+
+    vel_enemy: {
+        text: [
+            {text: `"Oi, is this an erumbu circus or what?"`},
+            {text: `Vel’s grin fades. You’ve gained +2 Rivalry with Vel.`}
+        ],
+        continue: [
+            { next: "pistol_monkey_game"}
+        ]
+    },
+
+    pistol_monkey_game: {
+        text: [
+            {text: ``},
         ],
         choices: [
             { text: "Go to bed", next: "end_sleep" }
