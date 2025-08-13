@@ -340,9 +340,9 @@ const scenes = {
     zuru_twins_arrives: {
         text: [
             { text: "You open the lock."},
-            { text: `The double doors slam open so hard they rattle on their hinges. `, music: "sulleraiya.wav"},
-            { text: `A single **deep drumbeat** echoes across the hall — BOOM.`},
-            { text: `Two midgets in glittery red vests march in.  `},
+            { text: `The double doors slam open so hard they rattle on their hinges.`, music: "sulleraiya.wav"},
+            { text: `Deep drumbeats echoes across the hall — BOOM.`},
+            { text: `Two midgets in glittery red vests march in.`},
             { text: `One bangs tiny golden drums in a pounding rhythm`},
             { text: `The other carries something wrapped in red silk on a golden cushion.  `},
             { text: `**"The King is coming! The Sulerumbu King is coming!"** they shout in unison`},
