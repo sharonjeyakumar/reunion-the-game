@@ -142,26 +142,45 @@ function renderScene(){
     currentDialogue = 0;
     dialogue = scene.text;
     choicesShown = false;
-    
+}
+
+let currentMusic = null;
+function musicHandler(ost){
+    if(!ost) return;
+
+    if(currentMusic){
+        currentMusic.pause();
+        currentMusic.currentTime = 0;
+    }
+    currentMusic = new Audio(`ost/${ost}`);
+    currentMusic.currentTime = 0;
+    currentMusic.play().catch(err => {
+        console.warn(`Music "${ost}" failed to play:`, err);
+    })
 }
 
 function addDialogue(){
     if(currentDialogue <= dialogue.length-1){
-
+        const line = dialogue[currentDialogue];
         const dialogueContainer = document.createElement('div');
         dialogueContainer.classList.add('dialogueContainer');
 
         const element = document.createElement('h2');
-        element.textContent = dialogue[currentDialogue];
+        element.textContent = line.text;
         dialogueContainer.appendChild(element);
         element.classList.add('dialogue');
-
+                                                 
         gameScreen.appendChild(dialogueContainer);
+
+        if (line.music) {
+            musicHandler(line.music);
+        }
 
         setTimeout(() => {
             element.classList.add('show');
             dialogueContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
             if(!choicesShown && !suppressClickSound){
+
             }
             suppressClickSound = false;
         }, 50);
@@ -171,7 +190,6 @@ function addDialogue(){
         choicesShown= true;
         showChoices(scenes[currentScene].choices);
         playSound(choiceSound);
-        
     }
 };
 
@@ -184,13 +202,11 @@ function showChoices(choices) {
         btn.classList.add('choiceBtn');
         btn.textContent = choice.text;
         setTimeout(()=>{
-
             btn.classList.add('show');
             choicesContainer.scrollIntoView({ behavior: 'smooth', block: 'end'});
         })
         btn.onclick = ()=>{
             suppressClickSound = true;
-
             clickSound.pause();
             clickSound.currentTime = 0;
             
@@ -231,52 +247,10 @@ gameScreen.addEventListener('click', () => {
 const scenes = {
     intro: {
         text: [
-            "Simson\nSubject: PSNA CSE D Batch Reunion – Special Night!",
-            "Simson stares at the screen, adjusting his glasses.",
-            // "“Hmm… maybe nvidia will be there… research break for one night won’t hurt.”",
-            // "He clicks “Yes,” hiding a tab that definitely isn’t research.",
-            // "Sharvesh\nSubject: Come meet your old friends!",
-            // "“Murder rate in the city’s low this week. I can afford to attend… might get free food.”",
-            // "He doesn’t notice the anonymous sender’s address isn’t PSNA’s usual domain.",
-            // "Sharon\nSubject: Let’s reunite in the Lord’s joy!",
-            // "“This is it… a hall full of sinners ready to be saved. By the end of the night, half of them will be Christians. The other half… well, I’ll work on them next time.”",
-            // "“The Lord moves in mysterious ways… so do I 😉.”",
-            // "Tharun\nSubject: Come with your twin spirit! Show us the prime time prime bro",
-            // "“Finally… a chance to show them I made it. Time to be the superior twin.”",
-            // "Syed\nSubject: Big gathering, big opportunities.",
-            // "“Maybe I can move some barrels… call it charity work.”",
-            // "Varshan\nSubject: Old friends new deals!",
-            // "Varshan leans back in his chair at the brothel office, counting cash.",
-            // "“Reunion night? Business can wait… or maybe I’ll recruit some talent.”",
-            // "Dhanush\nSubject: Bring your family!",
-            // "“Varshan’s coming? Great… just great.”",
-            // "Vikaas\nSubject: Special guest appearance.",
-            // "“Finally, an audience without cameras… I think.”",
-            // "Vishal R\nSubject: See your old batchmates!",
-            // "“Amma, can I get Uber money for this?”",
-            // "Vishal Kumar\nSubject: It’s been a while… friends!",
-            // "“I could skip… but Sofa will be there.”",
-            // "A faint smirk forms.",
-            // "“That’s reason enough.”",
-            // "Yuvenesh\nSubject: A family reunion… or something else?",
-            // "Yuvenesh scrolls through the email, side-eyeing 8 across the room.",
-            // "“Married life is… fine. But PSNA reunions?”, He exhales.",
-            // "“If the old gang’s coming… I better keep my guard up.”",
-            // "Subish\nSubject: We might need your help.",
-            // "Subish reads the invite and grins.",
-            // "“Sounds ominous… but I’ll bring my medical kit… and drugs.”",
-            // "He pats his bag, where the paracetamol sits next to syringes of… less-than-legal substances.",
-            // "“For… emergencies, of course.”",
-            // "Sofiwari\nSubject: Simson will be there.",
-            // "She sighs dreamily.",
-            // "“Finally… maybe tonight I’ll tell him.”",
-            // "Vel\nSubject: The King returns.",
-            // "“They’ve forgotten who the Sulerumbu King is. Time to remind them.”",
-            // "He adjusts his shades and clicks “Yes” on the RSVP.",
-            // "Shri Ram & Sri Dhanush\nSubject: Custody battle can wait… the reunion won’t.",
-            // "They look at each other.",
-            // "“They haven’t forgotten? Good.”",
-            // "Both silently wonder if this is their chance to win over Sri Varshan — or at least ruin the other’s chances.",
+            { text: "As tempers flare, the room descends into utter chaos—shouts echo, fists fly, and the air thickens with tension. People push and shove, their anger unleashed in a frenzy of violence."},
+            { text: "Suddenly, cutting sharply through the cacophony, a piercing screech rends the air—an eerie, haunting sound that forces everyone to momentarily freeze."},
+            { text: "From above, a massive hawk descends with terrifying grace. Nearly 2 feet tall, its wings spread wide—stretching over 4 feet—casting a vast shadow over the crowd. Its powerful talons reach out like iron claws, ready to seize its prey.", music: "hawk.mp3"},
+            { text: "Gasps ripple through the crowd as all eyes fixate on the unbelievable sight: Pranav of CSE C, perched atop the giant hawk, gripping tightly with fierce determination. The bird’s muscles tense as it swoops down, snatching Vel into its grasp with swift precision."},
         ],
         choices: [
             { text: "Go to the reunion you wanted to go", next: "reunion_entry" },
@@ -286,8 +260,8 @@ const scenes = {
 
     reunion_entry: {
         text: [
-            "The hall is buzzing with laughter. Old friends gather in small circles.",
-            "You spot Nivi near the buffet table."
+            { text: "The hall is buzzing with laughter. Old friends gather in small circles."},
+            { text: "You spot Nivi near the buffet table."}
         ],
         choices: [
             { text: "Talk to nvidia", next: "talk_nvidia" },
